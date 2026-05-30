@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GenesAI v7</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg2: #f7f7f5;
+    --bg3: #f0efea;
+    --text: #1a1a1a;
+    --text2: #6b6b6b;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.2);
+    --purple-light: #EEEDFE;
+    --purple: #534AB7;
+    --purple-dark: #3C3489;
+    --green-light: #E1F5EE;
+    --green: #0F6E56;
+    --gray-light: #F1EFE8;
+    --gray: #5F5E5A;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a;
+      --bg2: #222222;
+      --bg3: #2a2a2a;
+      --text: #f0f0f0;
+      --text2: #999999;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.2);
+      --purple-light: #2a2660;
+      --purple-dark: #c0bbf8;
+      --green-light: #0d3a2a;
+      --green: #5DCAA5;
+      --gray-light: #2a2a28;
+      --gray: #aaaaaa;
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg3);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .app { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+
+  /* Top bar */
+  .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-text { font-size: 22px; font-weight: 600; color: var(--text); }
+  .logo-badge { font-size: 11px; background: var(--purple-light); color: var(--purple-dark); padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .status { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #1D9E75; }
+
+  /* Sections */
+  .section { margin-bottom: 2rem; }
+  .section-title { font-size: 11px; font-weight: 600; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+
+  /* Agent grid */
+  .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+
+  .agent-card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    position: relative;
+    user-select: none;
+  }
+  .agent-card:hover { border-color: var(--border2); background: var(--bg2); transform: translateY(-1px); }
+  .agent-card.locked { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+
+  .agent-icon { font-size: 22px; margin-bottom: 8px; color: var(--purple); }
+  .agent-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .agent-desc { font-size: 11px; color: var(--text2); line-height: 1.5; }
+  .agent-status { position: absolute; top: 10px; right: 10px; font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 500; }
+  .status-ready { background: var(--green-light); color: var(--green); }
+  .status-soon { background: var(--gray-light); color: var(--gray); }
+
+  /* Panel overlay */
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 100; }
+  .overlay.visible { display: block; }
+
+  .panel {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--bg);
+    border-top: 0.5px solid var(--border2);
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 1.5rem;
+    z-index: 101;
+    max-height: 85vh;
+    overflow-y: auto;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .panel.visible { display: block; }
+
+  .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+  .panel-title { font-size: 16px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .close-btn { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 50%; width: 30px; height: 30px; font-size: 18px; color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
+
+  /* Forms */
+  .lang-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .lang-btn { padding: 5px 14px; border-radius: 20px; border: 0.5px solid var(--border2); font-size: 12px; cursor: pointer; background: transparent; color: var(--text2); transition: all 0.15s; }
+  .lang-btn.active { background: var(--purple-light); color: var(--purple-dark); border-color: transparent; font-weight: 500; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.04em; }
+  .field input, .field select, .field textarea {
+    font-size: 13px; padding: 8px 10px;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius-sm);
+    background: var(--bg2);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--purple); }
+  .field textarea { resize: vertical; min-height: 65px; }
+  .full { grid-column: 1 / -1; }
+
+  .run-btn {
+    width: 100%; padding: 10px; font-size: 13px; font-weight: 600;
+    border-radius: var(--radius-sm); border: 0.5px solid var(--border2);
+    background: var(--bg2); color: var(--text); cursor: pointer; margin-top: 4px;
+    transition: background 0.15s;
+  }
+  .run-btn:hover { background: var(--purple-light); color: var(--purple-dark); border-color: var(--purple); }
+  .run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .output-box {
+    background: var(--bg2); border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 1rem; margin-top: 12px;
+    font-size: 13px; line-height: 1.8; color: var(--text);
+    white-space: pre-wrap; display: none;
+  }
+  .output-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; display: none; }
+  .char-count { font-size: 11px; color: var(--text2); }
+  .copy-btn {
+    font-size: 11px; color: var(--text2); background: none;
+    border: 0.5px solid var(--border); border-radius: var(--radius-sm);
+    padding: 4px 10px; cursor: pointer; display: flex; align-items: center; gap: 4px;
+  }
+  .copy-btn:hover { background: var(--bg3); }
+
+  .loading-dots { display: inline-flex; gap: 4px; align-items: center; }
+  .loading-dots span { width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: bounce 1.2s infinite; }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-5px)} }
+
+  @media (max-width: 480px) {
+    .form-row { grid-template-columns: 1fr; }
+    .full { grid-column: 1; }
+    .agents-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+
+<div class="app">
+  <div class="top-bar">
+    <div class="logo">
+      <span class="logo-text">GenesAI</span>
+      <span class="logo-badge">v7</span>
+    </div>
+    <div class="status">
+      <span class="status-dot"></span>
+      3 agentes ativos · 8 em breve
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">✍️ Produção de conteúdo</div>
+    <div class="agents-grid">
+      <div class="agent-card" onclick="openPanel('copy')">
+        <span class="agent-status status-ready">Ativo</span>
+        <div class="agent-icon"><i class="ti ti-pencil"></i></div>
+        <div class="agent-name">Redator Copy</div>
+        <div class="agent-desc">Cria textos prontos para publicar em qualquer rede</div>
+      </div>
+      <div class="agent-card" onclick="openPanel('hooks')">
+        <span class="agent-status status-ready">Ativo</span>
+        <div class="agent-icon"><i class="ti ti-hook"></i></div>
+        <div class="agent-name">Caçador de Hooks</div>
+        <div class="agent-desc">Gera ganchos virais adaptados ao seu nicho</div>
+      </div>
+      <div class="agent-card" onclick="openPanel('strategy')">
+        <span class="agent-status status-ready">Ativo</span>
+        <div class="agent-icon"><i class="ti ti-calendar-week"></i></div>
+        <div class="agent-name">Estrategista</div>
+        <div class="agent-desc">Cria 15 pautas semanais de conteúdo</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔍 Investigação</div>
+    <div class="agents-grid">
+      <div class="agent-card locked">
+        <span class="agent-status status-soon">Em breve</span>
+        <div class="agent-icon"><i class="ti ti-search"></i></div>
+        <div class="agent-name">Investigador</div>
+        <div class="agent-desc">Pesquisa tendências e temas relevantes</div>
+      </div>
+      <div class="agent-card locked">
+        <span class="agent-status status-soon">Em breve</span>
+        <div class="agent-icon"><i class="ti ti-brand-instagram"></i></div>
+        <div class="agent-name">Scout de Perfis</div>
+        <div class="agent-desc">Coleta ganchos de perfis do mesmo nicho</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📊 Análise</div>
+    <div class="agents-grid">
+      <div class="agent-card locked">
+        <span class="agent-status status-soon">Em breve</span>
+        <div class="agent-icon"><i class="ti ti-chart-bar"></i></div>
+        <div class="agent-name">Analista de Perfil</div>
+        <div class="agent-desc">Analisa seu desempenho e métricas</div>
+      </div>
+      <div class="agent-card locked">
+        <span class="agent-status status-soon">Em breve</span>
+        <div class="agent-icon"><i class="ti ti-chart-dots"></i></div>
+        <div class="agent-name">Analista Competitivo</div>
+        <div class="agent-desc">Compara seu perfil com concorrentes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 Publicação</div>
+    <div class="agents-grid">
+      <div class="agent-card locked">
+        <span class="agent-status status-soon">Em breve</span>
+        <div class="agent-icon"><i class="ti ti-brand-notion"></i></div>
+        <div class="agent-name">Publicador Notion</div>
+        <div class="agent-desc">Leva o calendário direto ao Notion</div>
+      </div>
+      <div class="agent-card locked">
+        <span class="agent-status status-soon">Em breve</span>
+        <div class="agent-icon"><i class="ti ti-palette"></i></div>
+        <div class="agent-name">Editor Canva</div>
+        <div class="agent-desc">Cria peças visuais automaticamente</div>
+      </div>
+      <div class="agent-card locked">
+        <span class="agent-status status-soon">Em breve</span>
+        <div class="agent-icon"><i class="ti ti-speakerphone"></i></div>
+        <div class="agent-name">Gestor de Tráfego</div>
+        <div class="agent-desc">Orienta criativos para tráfego pago</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🎬 Vídeo</div>
+    <div class="agents-grid">
+      <div class="agent-card locked">
+        <span class="agent-status status-soon">Em breve</span>
+        <div class="agent-icon"><i class="ti ti-video"></i></div>
+        <div class="agent-name">Editor de Vídeo</div>
+        <div class="agent-desc">Cria vídeos animados com Remotion</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Panel Copy -->
+<div class="panel" id="panel-copy">
+  <div class="panel-header">
+    <span class="panel-title"><i class="ti ti-pencil"></i> Redator Copy</span>
+    <button class="close-btn" onclick="closePanel()">×</button>
+  </div>
+  <div class="lang-row">
+    <button class="lang-btn active" onclick="setLang('pt','copy')" id="copy-btn-pt">🇧🇷 Português</button>
+    <button class="lang-btn" onclick="setLang('es','copy')" id="copy-btn-es">🇪🇸 Español</button>
+  </div>
+  <div class="form-row">
+    <div class="field"><label>Rede social</label>
+      <select id="c-platform">
+        <option value="instagram">Instagram</option>
+        <option value="tiktok">TikTok</option>
+        <option value="linkedin">LinkedIn</option>
+        <option value="twitter">Twitter / X</option>
+        <option value="youtube">YouTube</option>
+      </select>
+    </div>
+    <div class="field"><label>Tom</label>
+      <select id="c-tone">
+        <option value="inspirador">Inspirador</option>
+        <option value="educativo">Educativo</option>
+        <option value="provocativo">Provocativo</option>
+        <option value="pessoal">Pessoal / Storytelling</option>
+        <option value="direto">Direto ao ponto</option>
+        <option value="humorístico">Humorístico</option>
+      </select>
+    </div>
+    <div class="field full"><label>Tema</label><input type="text" id="c-topic" placeholder="Ex: Como crescer no Instagram sem pagar anúncios" /></div>
+    <div class="field full"><label>Hook — opcional</label><input type="text" id="c-hook" placeholder="Ex: Eu cresci 10k seguidores em 30 dias fazendo isso..." /></div>
+    <div class="field full"><label>Contexto — opcional</label><textarea id="c-context" placeholder="Nicho, público-alvo, palavras-chave..."></textarea></div>
+  </div>
+  <button class="run-btn" id="c-run" onclick="runCopy()"><i class="ti ti-sparkles"></i> Gerar copy</button>
+  <div class="output-box" id="c-output"></div>
+  <div class="output-footer" id="c-footer">
+    <span class="char-count" id="c-chars"></span>
+    <button class="copy-btn" onclick="copyOut('c-output')"><i class="ti ti-copy"></i> Copiar</button>
+  </div>
+</div>
+
+<!-- Panel Hooks -->
+<div class="panel" id="panel-hooks">
+  <div class="panel-header">
+    <span class="panel-title"><i class="ti ti-hook"></i> Caçador de Hooks</span>
+    <button class="close-btn" onclick="closePanel()">×</button>
+  </div>
+  <div class="lang-row">
+    <button class="lang-btn active" onclick="setLang('pt','hooks')" id="hooks-btn-pt">🇧🇷 Português</button>
+    <button class="lang-btn" onclick="setLang('es','hooks')" id="hooks-btn-es">🇪🇸 Español</button>
+  </div>
+  <div class="form-row">
+    <div class="field full"><label>Nicho / tema</label><input type="text" id="h-niche" placeholder="Ex: marketing digital, fitness, finanças pessoais..." /></div>
+    <div class="field"><label>Rede social</label>
+      <select id="h-platform">
+        <option value="instagram">Instagram</option>
+        <option value="tiktok">TikTok</option>
+        <option value="linkedin">LinkedIn</option>
+        <option value="youtube">YouTube</option>
+      </select>
+    </div>
+    <div class="field"><label>Tipo de hook</label>
+      <select id="h-type">
+        <option value="curiosidade">Curiosidade</option>
+        <option value="controvérsia">Controvérsia</option>
+        <option value="resultado">Resultado / transformação</option>
+        <option value="pergunta">Pergunta</option>
+        <option value="erro comum">Erro comum</option>
+        <option value="segredo revelado">Segredo revelado</option>
+      </select>
+    </div>
+    <div class="field full"><label>Público-alvo — opcional</label><input type="text" id="h-audience" placeholder="Ex: empreendedores iniciantes, mães de 30-40 anos..." /></div>
+  </div>
+  <button class="run-btn" id="h-run" onclick="runHooks()"><i class="ti ti-sparkles"></i> Gerar hooks</button>
+  <div class="output-box" id="h-output"></div>
+  <div class="output-footer" id="h-footer">
+    <span class="char-count" id="h-chars"></span>
+    <button class="copy-btn" onclick="copyOut('h-output')"><i class="ti ti-copy"></i> Copiar</button>
+  </div>
+</div>
+
+<!-- Panel Strategy -->
+<div class="panel" id="panel-strategy">
+  <div class="panel-header">
+    <span class="panel-title"><i class="ti ti-calendar-week"></i> Estrategista de Conteúdo</span>
+    <button class="close-btn" onclick="closePanel()">×</button>
+  </div>
+  <div class="lang-row">
+    <button class="lang-btn active" onclick="setLang('pt','strategy')" id="strategy-btn-pt">🇧🇷 Português</button>
+    <button class="lang-btn" onclick="setLang('es','strategy')" id="strategy-btn-es">🇪🇸 Español</button>
+  </div>
+  <div class="form-row">
+    <div class="field full"><label>Nicho / tema principal</label><input type="text" id="s-niche" placeholder="Ex: marketing digital para pequenos negócios" /></div>
+    <div class="field full"><label>Público-alvo</label><input type="text" id="s-audience" placeholder="Ex: empreendedores de 25-40 anos" /></div>
+    <div class="field"><label>Redes principais</label>
+      <select id="s-platform">
+        <option value="Instagram e TikTok">Instagram + TikTok</option>
+        <option value="Instagram">Só Instagram</option>
+        <option value="LinkedIn">LinkedIn</option>
+        <option value="YouTube">YouTube</option>
+        <option value="todas as redes">Todas as redes</option>
+      </select>
+    </div>
+    <div class="field"><label>Objetivo da semana</label>
+      <select id="s-goal">
+        <option value="crescimento de seguidores">Crescimento</option>
+        <option value="engajamento">Engajamento</option>
+        <option value="vendas">Vendas</option>
+        <option value="autoridade">Autoridade</option>
+        <option value="lançamento">Lançamento</option>
+      </select>
+    </div>
+    <div class="field full"><label>Contexto extra — opcional</label><textarea id="s-context" placeholder="Produtos, serviços, eventos da semana..."></textarea></div>
+  </div>
+  <button class="run-btn" id="s-run" onclick="runStrategy()"><i class="ti ti-sparkles"></i> Gerar 15 pautas</button>
+  <div class="output-box" id="s-output"></div>
+  <div class="output-footer" id="s-footer">
+    <span class="char-count" id="s-chars"></span>
+    <button class="copy-btn" onclick="copyOut('s-output')"><i class="ti ti-copy"></i> Copiar</button>
+  </div>
+</div>
+
+<script>
+const langs = { copy: 'pt', hooks: 'pt', strategy: 'pt' };
+
+function openPanel(id) {
+  closePanel();
+  document.getElementById('panel-' + id).classList.add('visible');
+  document.getElementById('overlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePanel() {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('visible'));
+  document.getElementById('overlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+function setLang(lang, agent) {
+  langs[agent] = lang;
+  document.getElementById(agent + '-btn-pt').classList.toggle('active', lang === 'pt');
+  document.getElementById(agent + '-btn-es').classList.toggle('active', lang === 'es');
+}
+
+async function callClaude(system, user, outputId, footerId, charsId, btnId, btnLabel) {
+  const btn = document.getElementById(btnId);
+  const out = document.getElementById(outputId);
+  const footer = document.getElementById(footerId);
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span> Gerando...';
+  out.style.display = 'block';
+  out.textContent = '';
+  footer.style.display = 'none';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system, messages: [{ role: 'user', content: user }] })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || 'Erro ao gerar.';
+    out.textContent = text;
+    document.getElementById(charsId).textContent = text.length + ' caracteres';
+    footer.style.display = 'flex';
+  } catch(e) {
+    out.textContent = 'Erro de conexão. Tente novamente.';
+    out.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="ti ti-sparkles"></i> ' + btnLabel;
+}
+
+function runCopy() {
+  const lang = langs.copy === 'pt' ? 'português brasileiro' : 'español latino';
+  const platform = document.getElementById('c-platform').value;
+  const tone = document.getElementById('c-tone').value;
+  const topic = document.getElementById('c-topic').value.trim();
+  if (!topic) { alert('Preencha o tema.'); return; }
+  const hook = document.getElementById('c-hook').value.trim();
+  const context = document.getElementById('c-context').value.trim();
+  const system = `Você é um redator de copy especialista em redes sociais. Escreva em ${lang}. Adapte o formato para ${platform}. Tom: ${tone}. Sem asteriscos nem markdown. Para Instagram/TikTok use emojis e hashtags. Para Twitter máximo 280 caracteres. Texto pronto para publicar.`;
+  const user = `Tema: ${topic}${hook ? '\nHook: ' + hook : ''}${context ? '\nContexto: ' + context : ''}`;
+  callClaude(system, user, 'c-output', 'c-footer', 'c-chars', 'c-run', 'Gerar copy');
+}
+
+function runHooks() {
+  const lang = langs.hooks === 'pt' ? 'português brasileiro' : 'español latino';
+  const niche = document.getElementById('h-niche').value.trim();
+  if (!niche) { alert('Preencha o nicho.'); return; }
+  const platform = document.getElementById('h-platform').value;
+  const type = document.getElementById('h-type').value;
+  const audience = document.getElementById('h-audience').value.trim();
+  const system = `Você é um especialista em hooks virais para redes sociais. Escreva em ${lang}. Crie 10 hooks do tipo "${type}" para ${platform}. Cada hook em uma linha numerada, sem explicações extras. Diretos, impactantes e prontos para usar.`;
+  const user = `Nicho: ${niche}${audience ? '\nPúblico: ' + audience : ''}`;
+  callClaude(system, user, 'h-output', 'h-footer', 'h-chars', 'h-run', 'Gerar hooks');
+}
+
+function runStrategy() {
+  const lang = langs.strategy === 'pt' ? 'português brasileiro' : 'español latino';
+  const niche = document.getElementById('s-niche').value.trim();
+  if (!niche) { alert('Preencha o nicho.'); return; }
+  const audience = document.getElementById('s-audience').value.trim();
+  const platform = document.getElementById('s-platform').value;
+  const goal = document.getElementById('s-goal').value;
+  const context = document.getElementById('s-context').value.trim();
+  const system = `Você é uma estrategista de conteúdo sênior. Escreva em ${lang}. Crie exatamente 15 pautas numeradas de 1 a 15. Para cada pauta: tema, formato sugerido e melhor dia para postar. Sem introduções, direto às pautas.`;
+  const user = `Nicho: ${niche}\nPúblico: ${audience}\nRedes: ${platform}\nObjetivo: ${goal}${context ? '\nContexto: ' + context : ''}`;
+  callClaude(system, user, 's-output', 's-footer', 's-chars', 's-run', 'Gerar 15 pautas');
+}
+
+function copyOut(id) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
+    const btns = document.querySelectorAll('.copy-btn');
+    btns.forEach(b => { if(b.onclick && b.onclick.toString().includes(id)) { b.innerHTML = '<i class="ti ti-check"></i> Copiado!'; setTimeout(() => b.innerHTML = '<i class="ti ti-copy"></i> Copiar', 2000); }});
+  });
+}
+</script>
+</body>
+</html>
