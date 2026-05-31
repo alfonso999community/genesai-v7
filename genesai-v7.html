@@ -10,350 +10,132 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg: #080808;
-  --bg2: #111111;
-  --bg3: #1a1a1a;
-  --bg4: #222222;
-  --text: #f0f0f0;
-  --text2: #888888;
-  --text3: #555555;
-  --accent: #7C3AED;
-  --accent2: #9F67FF;
-  --accent-glow: rgba(124,58,237,0.3);
-  --gold: #F59E0B;
-  --green: #10B981;
-  --blue: #3B82F6;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --radius: 16px;
-  --radius-sm: 10px;
+  --bg: #080808; --bg2: #111111; --bg3: #1a1a1a; --bg4: #222222;
+  --text: #f0f0f0; --text2: #888888; --text3: #555555;
+  --accent: #7C3AED; --accent2: #9F67FF; --accent-glow: rgba(124,58,237,0.3);
+  --gold: #F59E0B; --green: #10B981; --blue: #3B82F6; --red: #EF4444;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+  --radius: 16px; --radius-sm: 10px;
 }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* NOISE TEXTURE */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
-}
-
-.app {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
-  position: relative;
-  z-index: 1;
-}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
+.app { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; position: relative; z-index: 1; }
 
 /* HEADER */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 0.5px solid var(--border);
-}
-
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
 .logo-wrap { display: flex; align-items: center; gap: 14px; }
-.logo-icon {
-  width: 42px; height: 42px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 0 24px var(--accent-glow);
-}
+.logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 24px var(--accent-glow); }
 .logo-text { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
 .logo-text span { color: var(--accent2); }
-.logo-version {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
-  background: var(--bg3); border: 0.5px solid var(--border2);
-  color: var(--text2); padding: 3px 8px; border-radius: 20px;
-}
-
+.logo-version { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; background: var(--bg3); border: 0.5px solid var(--border2); color: var(--text2); padding: 3px 8px; border-radius: 20px; }
 .header-right { display: flex; align-items: center; gap: 10px; }
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 .status-text { font-size: 12px; color: var(--text2); }
 
-/* GENESIS SECTION */
-.genesis-section {
-  background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(159,103,255,0.06));
-  border: 0.5px solid rgba(124,58,237,0.3);
-  border-radius: var(--radius);
-  padding: 1.75rem;
-  margin-bottom: 2.5rem;
-  position: relative;
-  overflow: hidden;
-}
-.genesis-section::before {
-  content: '';
-  position: absolute;
-  top: -40px; right: -40px;
-  width: 150px; height: 150px;
-  background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%);
-  pointer-events: none;
-}
-.genesis-header {
-  display: flex; align-items: center; gap: 14px; margin-bottom: 1.25rem;
-}
-.genesis-avatar {
-  width: 48px; height: 48px;
-  background: linear-gradient(135deg, var(--accent), var(--gold));
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
-  box-shadow: 0 0 20px rgba(124,58,237,0.4);
-  flex-shrink: 0;
-}
-.genesis-info { flex: 1; }
+/* GENESIS */
+.genesis-section { background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(159,103,255,0.06)); border: 0.5px solid rgba(124,58,237,0.3); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 2.5rem; position: relative; overflow: hidden; }
+.genesis-section::before { content: ''; position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%); pointer-events: none; }
+.genesis-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.25rem; }
+.genesis-avatar { width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), var(--gold)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 0 20px rgba(124,58,237,0.4); flex-shrink: 0; }
 .genesis-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
 .genesis-role { font-size: 12px; color: var(--accent2); font-weight: 500; letter-spacing: 0.05em; }
-
-.chat-area {
-  background: var(--bg2);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.25rem;
-  min-height: 120px;
-  max-height: 280px;
-  overflow-y: auto;
-  margin-bottom: 1rem;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--text2);
-}
+.chat-area { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 1rem 1.25rem; min-height: 120px; max-height: 300px; overflow-y: auto; margin-bottom: 1rem; font-size: 14px; line-height: 1.7; color: var(--text2); }
 .chat-area::-webkit-scrollbar { width: 4px; }
 .chat-area::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 4px; }
-
 .msg { margin-bottom: 12px; }
 .msg:last-child { margin-bottom: 0; }
 .msg-genesis { color: var(--text); }
 .msg-genesis strong { color: var(--accent2); font-size: 11px; font-weight: 600; display: block; margin-bottom: 2px; letter-spacing: 0.05em; }
 .msg-user { text-align: right; }
 .msg-user span { background: var(--bg3); border-radius: 10px 10px 2px 10px; padding: 6px 12px; display: inline-block; font-size: 13px; color: var(--text); }
-
 .chat-input-row { display: flex; gap: 10px; }
-.chat-input {
-  flex: 1; background: var(--bg2); border: 0.5px solid var(--border2);
-  border-radius: var(--radius-sm); padding: 10px 14px;
-  font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif;
-  outline: none; transition: border-color 0.15s;
-}
+.chat-input { flex: 1; background: var(--bg2); border: 0.5px solid var(--border2); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s; }
 .chat-input:focus { border-color: var(--accent); }
 .chat-input::placeholder { color: var(--text3); }
-.send-btn {
-  background: var(--accent); border: none; border-radius: var(--radius-sm);
-  width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; color: white; font-size: 16px;
-  transition: background 0.15s, transform 0.1s;
-  box-shadow: 0 0 16px var(--accent-glow);
-}
+.send-btn { background: var(--accent); border: none; border-radius: var(--radius-sm); width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-size: 16px; transition: background 0.15s, transform 0.1s; box-shadow: 0 0 16px var(--accent-glow); }
 .send-btn:hover { background: var(--accent2); transform: scale(1.05); }
 .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+/* SCORE BOARD */
+.scoreboard { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; }
+.scoreboard-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+.scores-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+.score-item { background: var(--bg3); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.score-top { display: flex; justify-content: space-between; align-items: center; }
+.score-name { font-size: 12px; font-weight: 600; color: var(--text); font-family: 'Syne', sans-serif; }
+.score-level { font-size: 10px; color: var(--gold); font-weight: 700; }
+.score-bar-bg { height: 3px; background: var(--bg4); border-radius: 3px; overflow: hidden; }
+.score-bar { height: 100%; border-radius: 3px; transition: width 1s ease; }
+.score-xp { font-size: 10px; color: var(--text3); }
+
+/* SECTIONS */
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; padding-left: 2px; display: flex; align-items: center; gap: 8px; }
+.section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
+.section { margin-bottom: 2rem; }
+.agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.agent-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.1rem; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+.agent-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.agent-card.locked { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+.agent-emoji { font-size: 22px; margin-bottom: 10px; display: block; }
+.agent-codename { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.agent-role { font-size: 11px; color: var(--text3); line-height: 1.4; }
+.agent-badge { position: absolute; top: 10px; right: 10px; font-size: 9px; font-weight: 600; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 20px; }
+.badge-active { background: rgba(16,185,129,0.15); color: var(--green); }
+.badge-soon { background: rgba(255,255,255,0.05); color: var(--text3); }
+
+/* OVERLAY + PANEL */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 100; }
+.overlay.visible { display: block; }
+.panel { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 0.5px solid var(--border2); border-radius: 20px 20px 0 0; padding: 1.75rem; z-index: 101; max-height: 85vh; overflow-y: auto; max-width: 900px; margin: 0 auto; }
+.panel.visible { display: block; }
+.panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.panel-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.close-btn { width: 30px; height: 30px; background: var(--bg3); border: 0.5px solid var(--border); border-radius: 50%; font-size: 16px; color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.lang-row { display: flex; gap: 8px; margin-bottom: 14px; }
+.lang-btn { padding: 5px 14px; border-radius: 20px; border: 0.5px solid var(--border2); font-size: 12px; cursor: pointer; background: transparent; color: var(--text2); font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+.lang-btn.active { background: var(--accent); color: white; border-color: transparent; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+.field input, .field select, .field textarea { font-size: 13px; padding: 9px 12px; border: 0.5px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg3); color: var(--text); outline: none; font-family: 'DM Sans', sans-serif; transition: border-color 0.15s; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+.field textarea { resize: vertical; min-height: 65px; }
+.field select option { background: var(--bg3); }
+.full { grid-column: 1 / -1; }
+.run-btn { width: 100%; padding: 11px; font-size: 13px; font-weight: 600; border-radius: var(--radius-sm); border: none; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; cursor: pointer; margin-top: 4px; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s, transform 0.1s; box-shadow: 0 0 20px var(--accent-glow); }
+.run-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.run-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.output-box { background: var(--bg3); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; margin-top: 14px; font-size: 13px; line-height: 1.8; color: var(--text); white-space: pre-wrap; display: none; }
+.output-footer { display: none; justify-content: space-between; align-items: center; margin-top: 8px; }
+.char-count { font-size: 11px; color: var(--text3); }
+.copy-btn { font-size: 11px; color: var(--text2); background: var(--bg3); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 4px 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 4px; }
 .loading-dots { display: inline-flex; gap: 4px; align-items: center; }
 .loading-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--accent2); animation: bounce 1.2s infinite; }
 .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
 .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-5px)} }
-
-/* SECTION TITLES */
-.section-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--text3);
-  margin-bottom: 12px; padding-left: 2px;
-  display: flex; align-items: center; gap: 8px;
-}
-.section-label::after {
-  content: ''; flex: 1; height: 0.5px; background: var(--border);
-}
-
-/* AGENTS GRID */
-.agents-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-  margin-bottom: 2rem;
-}
-
-.agent-card {
-  background: var(--bg2);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-.agent-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.02));
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.agent-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-.agent-card:hover::before { opacity: 1; }
-.agent-card.locked { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
-.agent-card.active { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
-
-.agent-emoji { font-size: 22px; margin-bottom: 10px; display: block; }
-.agent-codename {
-  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
-  color: var(--text); margin-bottom: 3px;
-}
-.agent-role { font-size: 11px; color: var(--text3); line-height: 1.4; }
-.agent-badge {
-  position: absolute; top: 10px; right: 10px;
-  font-size: 9px; font-weight: 600; letter-spacing: 0.06em;
-  padding: 2px 7px; border-radius: 20px;
-}
-.badge-active { background: rgba(16,185,129,0.15); color: var(--green); }
-.badge-soon { background: rgba(255,255,255,0.05); color: var(--text3); }
-
-/* AGENT PANEL */
-.overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-  z-index: 100;
-}
-.overlay.visible { display: block; }
-
-.panel {
-  display: none; position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: var(--bg2);
-  border-top: 0.5px solid var(--border2);
-  border-radius: 20px 20px 0 0;
-  padding: 1.75rem;
-  z-index: 101;
-  max-height: 80vh;
-  overflow-y: auto;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.panel.visible { display: block; }
-
-.panel-header {
-  display: flex; align-items: center;
-  justify-content: space-between; margin-bottom: 1.25rem;
-}
-.panel-title {
-  font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700;
-  display: flex; align-items: center; gap: 10px;
-}
-.close-btn {
-  width: 30px; height: 30px; background: var(--bg3);
-  border: 0.5px solid var(--border); border-radius: 50%;
-  font-size: 16px; color: var(--text2); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-}
-.close-btn:hover { background: var(--bg4); }
-
-.lang-row { display: flex; gap: 8px; margin-bottom: 14px; }
-.lang-btn {
-  padding: 5px 14px; border-radius: 20px;
-  border: 0.5px solid var(--border2); font-size: 12px;
-  cursor: pointer; background: transparent; color: var(--text2);
-  font-family: 'DM Sans', sans-serif; transition: all 0.15s;
-}
-.lang-btn.active { background: var(--accent); color: white; border-color: transparent; }
-
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-.field { display: flex; flex-direction: column; gap: 5px; }
-.field label {
-  font-size: 10px; font-weight: 600; color: var(--text3);
-  text-transform: uppercase; letter-spacing: 0.08em;
-}
-.field input, .field select, .field textarea {
-  font-size: 13px; padding: 9px 12px;
-  border: 0.5px solid var(--border2);
-  border-radius: var(--radius-sm);
-  background: var(--bg3); color: var(--text);
-  outline: none; font-family: 'DM Sans', sans-serif;
-  transition: border-color 0.15s;
-}
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
-.field textarea { resize: vertical; min-height: 65px; }
-.field select option { background: var(--bg3); }
-.full { grid-column: 1 / -1; }
-
-.run-btn {
-  width: 100%; padding: 11px; font-size: 13px; font-weight: 600;
-  border-radius: var(--radius-sm); border: none;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: white; cursor: pointer; margin-top: 4px;
-  font-family: 'DM Sans', sans-serif;
-  transition: opacity 0.15s, transform 0.1s;
-  box-shadow: 0 0 20px var(--accent-glow);
-}
-.run-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-.run-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-.output-box {
-  background: var(--bg3); border: 0.5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 1rem; margin-top: 14px;
-  font-size: 13px; line-height: 1.8; color: var(--text);
-  white-space: pre-wrap; display: none;
-}
-.output-footer { display: none; justify-content: space-between; align-items: center; margin-top: 8px; }
-.char-count { font-size: 11px; color: var(--text3); }
-.copy-btn {
-  font-size: 11px; color: var(--text2); background: var(--bg3);
-  border: 0.5px solid var(--border); border-radius: var(--radius-sm);
-  padding: 4px 10px; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  display: flex; align-items: center; gap: 4px;
-}
-.copy-btn:hover { background: var(--bg4); }
-
-/* SECTION SPACING */
-.section { margin-bottom: 2rem; }
-
-@media (max-width: 500px) {
-  .form-row { grid-template-columns: 1fr; }
-  .full { grid-column: 1; }
-  .agents-grid { grid-template-columns: 1fr 1fr; }
-}
+@media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } .full { grid-column: 1; } .agents-grid { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
 <div class="overlay" id="overlay" onclick="closePanel()"></div>
-
 <div class="app">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="logo-wrap">
       <div class="logo-icon">🧬</div>
-      <div>
-        <div class="logo-text">Genes<span>AI</span></div>
-      </div>
+      <div><div class="logo-text">Genes<span>AI</span></div></div>
       <span class="logo-version">v7</span>
     </div>
     <div class="header-right">
       <div class="status-dot"></div>
-      <span class="status-text">3 ativos · 9 em breve</span>
+      <span class="status-text">5 ativos · 9 em breve</span>
     </div>
   </div>
 
-  <!-- GENESIS DIRECTOR -->
+  <!-- GENESIS -->
   <div class="genesis-section">
     <div class="genesis-header">
       <div class="genesis-avatar">👑</div>
@@ -365,32 +147,36 @@ body::before {
     <div class="chat-area" id="genesis-chat">
       <div class="msg msg-genesis">
         <strong>GENESIS</strong>
-        Olá. Sou o diretor da GenesAI v7. Fala comigo diretamente — diz-me o que precisas e eu coordeno toda a equipa. Podes pedir-me para criar conteúdo, analisar tendências, editar um vídeo ou planear a tua semana. A equipa trabalha, tu só tens que falar comigo.
+        Olá. Sou o diretor da GenesAI v7. Tens 14 agentes à tua disposição. Fala comigo — diz-me o nicho, o objetivo, ou o que precisas criar. Eu coordeno toda a equipa e entrego-te o plano pronto.
       </div>
     </div>
     <div class="chat-input-row">
       <input type="text" class="chat-input" id="genesis-input" placeholder="Fala com o Genesis..." onkeydown="if(event.key==='Enter')sendGenesis()" />
-      <button class="send-btn" id="genesis-send" onclick="sendGenesis()">
-        <i class="ti ti-send"></i>
-      </button>
+      <button class="send-btn" id="genesis-send" onclick="sendGenesis()"><i class="ti ti-send"></i></button>
     </div>
+  </div>
+
+  <!-- SCOREBOARD -->
+  <div class="scoreboard">
+    <div class="scoreboard-title">⚡ Performance dos Agentes</div>
+    <div class="scores-grid" id="scores-grid"></div>
   </div>
 
   <!-- INVESTIGAÇÃO -->
   <div class="section">
     <div class="section-label">🔍 Investigação</div>
     <div class="agents-grid">
-      <div class="agent-card locked">
-        <span class="agent-badge badge-soon">Em breve</span>
+      <div class="agent-card" onclick="openPanel('scout')">
+        <span class="agent-badge badge-active">Ativo</span>
         <span class="agent-emoji">🛰</span>
         <div class="agent-codename">Scout</div>
         <div class="agent-role">Investigador de tendências virais</div>
       </div>
-      <div class="agent-card locked">
-        <span class="agent-badge badge-soon">Em breve</span>
+      <div class="agent-card" onclick="openPanel('radar')">
+        <span class="agent-badge badge-active">Ativo</span>
         <span class="agent-emoji">📡</span>
         <div class="agent-codename">Radar</div>
-        <div class="agent-role">Caçador de hooks de outros perfis</div>
+        <div class="agent-role">Gerador de hooks por nicho</div>
       </div>
     </div>
   </div>
@@ -439,6 +225,25 @@ body::before {
     </div>
   </div>
 
+  <!-- GESTÃO -->
+  <div class="section">
+    <div class="section-label">🧠 Gestão de qualidade</div>
+    <div class="agents-grid">
+      <div class="agent-card locked">
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">🗂</span>
+        <div class="agent-codename">Memo</div>
+        <div class="agent-role">Memória de marca do cliente</div>
+      </div>
+      <div class="agent-card locked">
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">⚖️</span>
+        <div class="agent-codename">Judge</div>
+        <div class="agent-role">Controlo de qualidade dos outputs</div>
+      </div>
+    </div>
+  </div>
+
   <!-- PUBLICAÇÃO -->
   <div class="section">
     <div class="section-label">📋 Publicação</div>
@@ -479,6 +284,85 @@ body::before {
 
 </div>
 
+<!-- PANEL SCOUT -->
+<div class="panel" id="panel-scout">
+  <div class="panel-header">
+    <span class="panel-title">🛰 Scout — Tendências Virais</span>
+    <button class="close-btn" onclick="closePanel()">×</button>
+  </div>
+  <div class="lang-row">
+    <button class="lang-btn active" onclick="setLang('pt','scout')" id="scout-pt">🇧🇷 Português</button>
+    <button class="lang-btn" onclick="setLang('es','scout')" id="scout-es">🇪🇸 Español</button>
+  </div>
+  <div class="form-row">
+    <div class="field full"><label>Nicho</label><input type="text" id="sc-niche" placeholder="Ex: trading, fitness, finanças pessoais, marketing..." /></div>
+    <div class="field"><label>Plataforma</label>
+      <select id="sc-platform">
+        <option value="Instagram e TikTok">Instagram + TikTok</option>
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+        <option value="YouTube">YouTube</option>
+        <option value="LinkedIn">LinkedIn</option>
+      </select>
+    </div>
+    <div class="field"><label>Tipo de conteúdo</label>
+      <select id="sc-type">
+        <option value="tendências virais">Tendências virais</option>
+        <option value="formatos em alta">Formatos em alta</option>
+        <option value="tópicos em trending">Tópicos em trending</option>
+        <option value="estratégias de crescimento">Estratégias de crescimento</option>
+      </select>
+    </div>
+    <div class="field full"><label>Público-alvo — opcional</label><input type="text" id="sc-audience" placeholder="Ex: iniciantes, empreendedores, jovens de 20-30 anos..." /></div>
+  </div>
+  <button class="run-btn" id="sc-run" onclick="runScout()"><i class="ti ti-satellite"></i> Pesquisar tendências</button>
+  <div class="output-box" id="sc-output"></div>
+  <div class="output-footer" id="sc-footer">
+    <span class="char-count" id="sc-chars"></span>
+    <button class="copy-btn" onclick="copyOut('sc-output')"><i class="ti ti-copy"></i> Copiar</button>
+  </div>
+</div>
+
+<!-- PANEL RADAR -->
+<div class="panel" id="panel-radar">
+  <div class="panel-header">
+    <span class="panel-title">📡 Radar — Hooks por Nicho</span>
+    <button class="close-btn" onclick="closePanel()">×</button>
+  </div>
+  <div class="lang-row">
+    <button class="lang-btn active" onclick="setLang('pt','radar')" id="radar-pt">🇧🇷 Português</button>
+    <button class="lang-btn" onclick="setLang('es','radar')" id="radar-es">🇪🇸 Español</button>
+  </div>
+  <div class="form-row">
+    <div class="field full"><label>Nicho</label><input type="text" id="rd-niche" placeholder="Ex: trading, coaching, emagrecimento..." /></div>
+    <div class="field"><label>Plataforma</label>
+      <select id="rd-platform">
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+        <option value="YouTube">YouTube</option>
+        <option value="LinkedIn">LinkedIn</option>
+      </select>
+    </div>
+    <div class="field"><label>Estilo de hook</label>
+      <select id="rd-style">
+        <option value="curiosidade">Curiosidade</option>
+        <option value="controvérsia">Controvérsia</option>
+        <option value="resultado">Resultado / transformação</option>
+        <option value="erro comum">Erro comum</option>
+        <option value="segredo">Segredo revelado</option>
+        <option value="pergunta">Pergunta provocativa</option>
+      </select>
+    </div>
+    <div class="field full"><label>Contexto extra — opcional</label><input type="text" id="rd-context" placeholder="Ex: público iniciante, foco em resultados rápidos..." /></div>
+  </div>
+  <button class="run-btn" id="rd-run" onclick="runRadar()"><i class="ti ti-radar"></i> Gerar hooks</button>
+  <div class="output-box" id="rd-output"></div>
+  <div class="output-footer" id="rd-footer">
+    <span class="char-count" id="rd-chars"></span>
+    <button class="copy-btn" onclick="copyOut('rd-output')"><i class="ti ti-copy"></i> Copiar</button>
+  </div>
+</div>
+
 <!-- PANEL SAGE -->
 <div class="panel" id="panel-sage">
   <div class="panel-header">
@@ -490,7 +374,7 @@ body::before {
     <button class="lang-btn" onclick="setLang('es','sage')" id="sage-es">🇪🇸 Español</button>
   </div>
   <div class="form-row">
-    <div class="field full"><label>Nicho / tema principal</label><input type="text" id="s-niche" placeholder="Ex: marketing digital para pequenos negócios" /></div>
+    <div class="field full"><label>Nicho</label><input type="text" id="s-niche" placeholder="Ex: marketing digital para pequenos negócios" /></div>
     <div class="field full"><label>Público-alvo</label><input type="text" id="s-audience" placeholder="Ex: empreendedores de 25-40 anos" /></div>
     <div class="field"><label>Redes principais</label>
       <select id="s-platform">
@@ -501,7 +385,7 @@ body::before {
         <option value="todas as redes">Todas as redes</option>
       </select>
     </div>
-    <div class="field"><label>Objetivo da semana</label>
+    <div class="field"><label>Objetivo</label>
       <select id="s-goal">
         <option value="crescimento de seguidores">Crescimento</option>
         <option value="engajamento">Engajamento</option>
@@ -510,7 +394,7 @@ body::before {
         <option value="lançamento">Lançamento</option>
       </select>
     </div>
-    <div class="field full"><label>Contexto extra — opcional</label><textarea id="s-context" placeholder="Produtos, serviços, eventos da semana..."></textarea></div>
+    <div class="field full"><label>Contexto — opcional</label><textarea id="s-context" placeholder="Produtos, serviços, eventos da semana..."></textarea></div>
   </div>
   <button class="run-btn" id="s-run" onclick="runSage()"><i class="ti ti-sparkles"></i> Gerar 15 pautas</button>
   <div class="output-box" id="s-output"></div>
@@ -531,8 +415,8 @@ body::before {
     <button class="lang-btn" onclick="setLang('es','hook')" id="hook-es">🇪🇸 Español</button>
   </div>
   <div class="form-row">
-    <div class="field full"><label>Nicho / tema</label><input type="text" id="h-niche" placeholder="Ex: trading, fitness, finanças pessoais..." /></div>
-    <div class="field"><label>Rede social</label>
+    <div class="field full"><label>Nicho</label><input type="text" id="h-niche" placeholder="Ex: trading, fitness, finanças..." /></div>
+    <div class="field"><label>Plataforma</label>
       <select id="h-platform">
         <option value="Instagram">Instagram</option>
         <option value="TikTok">TikTok</option>
@@ -540,17 +424,17 @@ body::before {
         <option value="YouTube">YouTube</option>
       </select>
     </div>
-    <div class="field"><label>Tipo de hook</label>
+    <div class="field"><label>Tipo</label>
       <select id="h-type">
         <option value="curiosidade">Curiosidade</option>
         <option value="controvérsia">Controvérsia</option>
-        <option value="resultado">Resultado / transformação</option>
+        <option value="resultado">Resultado</option>
         <option value="pergunta">Pergunta</option>
         <option value="erro comum">Erro comum</option>
         <option value="segredo revelado">Segredo revelado</option>
       </select>
     </div>
-    <div class="field full"><label>Público-alvo — opcional</label><input type="text" id="h-audience" placeholder="Ex: iniciantes em trading, mães empreendedoras..." /></div>
+    <div class="field full"><label>Público — opcional</label><input type="text" id="h-audience" placeholder="Ex: iniciantes em trading..." /></div>
   </div>
   <button class="run-btn" id="h-run" onclick="runHook()"><i class="ti ti-sparkles"></i> Gerar hooks</button>
   <div class="output-box" id="h-output"></div>
@@ -571,7 +455,7 @@ body::before {
     <button class="lang-btn" onclick="setLang('es','quill')" id="quill-es">🇪🇸 Español</button>
   </div>
   <div class="form-row">
-    <div class="field"><label>Rede social</label>
+    <div class="field"><label>Plataforma</label>
       <select id="q-platform">
         <option value="Instagram">Instagram</option>
         <option value="TikTok">TikTok</option>
@@ -585,8 +469,8 @@ body::before {
         <option value="inspirador">Inspirador</option>
         <option value="educativo">Educativo</option>
         <option value="provocativo">Provocativo</option>
-        <option value="pessoal">Pessoal / Storytelling</option>
-        <option value="direto">Direto ao ponto</option>
+        <option value="pessoal">Pessoal</option>
+        <option value="direto">Direto</option>
         <option value="humorístico">Humorístico</option>
       </select>
     </div>
@@ -603,7 +487,51 @@ body::before {
 </div>
 
 <script>
-const langs = { sage: 'pt', hook: 'pt', quill: 'pt' };
+const langs = { scout: 'pt', radar: 'pt', sage: 'pt', hook: 'pt', quill: 'pt' };
+
+// SCOREBOARD
+const agentScores = {
+  GENESIS: { emoji: '👑', xp: 980, level: 10 },
+  Scout:   { emoji: '🛰', xp: 420, level: 5 },
+  Radar:   { emoji: '📡', xp: 380, level: 4 },
+  Sage:    { emoji: '🧠', xp: 610, level: 7 },
+  Hook:    { emoji: '🪝', xp: 530, level: 6 },
+  Quill:   { emoji: '✒️', xp: 490, level: 5 },
+  Mirror:  { emoji: '🪞', xp: 100, level: 1 },
+  Rival:   { emoji: '🎯', xp: 100, level: 1 },
+  Memo:    { emoji: '🗂', xp: 100, level: 1 },
+  Judge:   { emoji: '⚖️', xp: 100, level: 1 },
+  Notion:  { emoji: '📓', xp: 100, level: 1 },
+  Canvas:  { emoji: '🎨', xp: 100, level: 1 },
+  Boost:   { emoji: '🚀', xp: 100, level: 1 },
+  Cut:     { emoji: '✂️', xp: 200, level: 2 },
+};
+const colors = ['#7C3AED','#3B82F6','#10B981','#F59E0B','#EF4444','#EC4899','#06B6D4','#8B5CF6'];
+
+function renderScores() {
+  const grid = document.getElementById('scores-grid');
+  grid.innerHTML = Object.entries(agentScores).map(([name, data], i) => {
+    const pct = Math.min((data.xp / 1000) * 100, 100);
+    const color = colors[i % colors.length];
+    return `<div class="score-item">
+      <div class="score-top">
+        <span class="score-name">${data.emoji} ${name}</span>
+        <span class="score-level">Lv${data.level}</span>
+      </div>
+      <div class="score-bar-bg"><div class="score-bar" style="width:${pct}%;background:${color}"></div></div>
+      <span class="score-xp">${data.xp} XP</span>
+    </div>`;
+  }).join('');
+}
+renderScores();
+
+function addXP(agent, amount) {
+  if (agentScores[agent]) {
+    agentScores[agent].xp = Math.min(agentScores[agent].xp + amount, 1000);
+    agentScores[agent].level = Math.ceil(agentScores[agent].xp / 100);
+    renderScores();
+  }
+}
 
 function openPanel(id) {
   closePanel();
@@ -624,57 +552,69 @@ function setLang(lang, agent) {
   document.getElementById(agent + '-es').classList.toggle('active', lang === 'es');
 }
 
-async function callClaude(system, user, outputId, footerId, charsId, btnId, label) {
+async function callClaude(system, user, outputId, footerId, charsId, btnId, label, agentName) {
   const btn = document.getElementById(btnId);
   const out = document.getElementById(outputId);
   const footer = document.getElementById(footerId);
   btn.disabled = true;
   btn.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
-  out.style.display = 'block';
-  out.textContent = '';
-  footer.style.display = 'none';
-
+  out.style.display = 'block'; out.textContent = ''; footer.style.display = 'none';
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system,
-        messages: [{ role: 'user', content: user }]
-      })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system, messages: [{ role: 'user', content: user }] })
     });
     const data = await res.json();
     const text = data.content?.[0]?.text || 'Erro ao gerar.';
     out.textContent = text;
     document.getElementById(charsId).textContent = text.length + ' caracteres';
     footer.style.display = 'flex';
-  } catch(e) {
-    out.textContent = 'Erro de conexão.';
-    out.style.display = 'block';
-  }
-
+    if (agentName) addXP(agentName, 20);
+  } catch(e) { out.textContent = 'Erro de conexão.'; out.style.display = 'block'; }
   btn.disabled = false;
   btn.innerHTML = '<i class="ti ti-sparkles"></i> ' + label;
+}
+
+function runScout() {
+  const lang = langs.scout === 'pt' ? 'português brasileiro' : 'español latino';
+  const niche = document.getElementById('sc-niche').value.trim();
+  if (!niche) { alert('Preenche o nicho.'); return; }
+  const platform = document.getElementById('sc-platform').value;
+  const type = document.getElementById('sc-type').value;
+  const audience = document.getElementById('sc-audience').value.trim();
+  const system = `És o Scout, um especialista em tendências de redes sociais. Escreve em ${lang}. Analisa o nicho fornecido e identifica as principais tendências, formatos e tópicos que estão a performar melhor em ${platform}. Sê específico, prático e baseado no que realmente funciona atualmente. Organiza em secções claras. Sem introduções desnecessárias.`;
+  const user = `Nicho: ${niche}\nPlataforma: ${platform}\nTipo de análise: ${type}${audience ? '\nPúblico: ' + audience : ''}`;
+  callClaude(system, user, 'sc-output', 'sc-footer', 'sc-chars', 'sc-run', 'Pesquisar tendências', 'Scout');
+}
+
+function runRadar() {
+  const lang = langs.radar === 'pt' ? 'português brasileiro' : 'español latino';
+  const niche = document.getElementById('rd-niche').value.trim();
+  if (!niche) { alert('Preenche o nicho.'); return; }
+  const platform = document.getElementById('rd-platform').value;
+  const style = document.getElementById('rd-style').value;
+  const context = document.getElementById('rd-context').value.trim();
+  const system = `És o Radar, especialista em hooks virais para redes sociais. Escreve em ${lang}. Cria 12 hooks do estilo "${style}" para o nicho dado, otimizados para ${platform}. Cada hook numa linha numerada. Diretos, impactantes, prontos para usar. Varia os formatos.`;
+  const user = `Nicho: ${niche}${context ? '\nContexto: ' + context : ''}`;
+  callClaude(system, user, 'rd-output', 'rd-footer', 'rd-chars', 'rd-run', 'Gerar hooks', 'Radar');
 }
 
 function runSage() {
   const lang = langs.sage === 'pt' ? 'português brasileiro' : 'español latino';
   const niche = document.getElementById('s-niche').value.trim();
   if (!niche) { alert('Preenche o nicho.'); return; }
-  const system = `És uma estrategista de conteúdo sénior. Escreve em ${lang}. Cria exatamente 15 pautas numeradas de 1 a 15. Para cada pauta inclui: tema, formato sugerido e melhor dia para publicar. Sem introduções, direto às pautas.`;
-  const user = `Nicho: ${niche}\nPúblico: ${document.getElementById('s-audience').value}\nRedes: ${document.getElementById('s-platform').value}\nObjetivo: ${document.getElementById('s-goal').value}\n${document.getElementById('s-context').value ? 'Contexto: ' + document.getElementById('s-context').value : ''}`;
-  callClaude(system, user, 's-output', 's-footer', 's-chars', 's-run', 'Gerar 15 pautas');
+  const system = `És o Sage, estrategista de conteúdo sénior. Escreve em ${lang}. Cria exatamente 15 pautas numeradas. Para cada uma: tema, formato e melhor dia. Sem introduções.`;
+  const user = `Nicho: ${niche}\nPúblico: ${document.getElementById('s-audience').value}\nRedes: ${document.getElementById('s-platform').value}\nObjetivo: ${document.getElementById('s-goal').value}${document.getElementById('s-context').value ? '\nContexto: ' + document.getElementById('s-context').value : ''}`;
+  callClaude(system, user, 's-output', 's-footer', 's-chars', 's-run', 'Gerar 15 pautas', 'Sage');
 }
 
 function runHook() {
   const lang = langs.hook === 'pt' ? 'português brasileiro' : 'español latino';
   const niche = document.getElementById('h-niche').value.trim();
   if (!niche) { alert('Preenche o nicho.'); return; }
-  const system = `És um especialista em hooks virais. Escreve em ${lang}. Cria 10 hooks do tipo "${document.getElementById('h-type').value}" para ${document.getElementById('h-platform').value}. Um por linha, numerados, sem explicações. Diretos e impactantes.`;
+  const system = `És o Hook, especialista em ganchos virais. Escreve em ${lang}. Cria 10 hooks do tipo "${document.getElementById('h-type').value}" para ${document.getElementById('h-platform').value}. Um por linha, numerados.`;
   const user = `Nicho: ${niche}${document.getElementById('h-audience').value ? '\nPúblico: ' + document.getElementById('h-audience').value : ''}`;
-  callClaude(system, user, 'h-output', 'h-footer', 'h-chars', 'h-run', 'Gerar hooks');
+  callClaude(system, user, 'h-output', 'h-footer', 'h-chars', 'h-run', 'Gerar hooks', 'Hook');
 }
 
 function runQuill() {
@@ -682,31 +622,30 @@ function runQuill() {
   const topic = document.getElementById('q-topic').value.trim();
   if (!topic) { alert('Preenche o tema.'); return; }
   const platform = document.getElementById('q-platform').value;
-  const tone = document.getElementById('q-tone').value;
-  const system = `És um redator de copy especialista em redes sociais. Escreve em ${lang}. Adapta o formato para ${platform}. Tom: ${tone}. Sem asteriscos nem markdown. Para Instagram/TikTok usa emojis e hashtags. Para Twitter máximo 280 caracteres. Texto pronto para publicar.`;
+  const system = `És o Quill, redator de copy para redes sociais. Escreve em ${lang}. Adapta para ${platform}. Tom: ${document.getElementById('q-tone').value}. Sem markdown. Texto pronto para publicar.`;
   const user = `Tema: ${topic}${document.getElementById('q-hook').value ? '\nHook: ' + document.getElementById('q-hook').value : ''}${document.getElementById('q-context').value ? '\nContexto: ' + document.getElementById('q-context').value : ''}`;
-  callClaude(system, user, 'q-output', 'q-footer', 'q-chars', 'q-run', 'Gerar copy');
+  callClaude(system, user, 'q-output', 'q-footer', 'q-chars', 'q-run', 'Gerar copy', 'Quill');
 }
 
-function copyOut(id) {
-  navigator.clipboard.writeText(document.getElementById(id).textContent);
-}
+function copyOut(id) { navigator.clipboard.writeText(document.getElementById(id).textContent); }
 
 // GENESIS CHAT
-const genesisSystem = `És o GENESIS, o diretor da agência GenesAI v7. Falas sempre em português do Brasil (ou espanhol se o utilizador escrever em espanhol). Tens uma equipa de 11 agentes especializados:
-- Scout (tendências virais) — em breve
-- Radar (hooks de outros perfis) — em breve  
-- Mirror (análise do perfil próprio) — em breve
+const genesisSystem = `És o GENESIS, diretor da agência GenesAI v7. Tens 14 agentes:
+- Scout (tendências virais) — ATIVO
+- Radar (hooks por nicho) — ATIVO
+- Mirror (análise perfil) — em breve
 - Rival (análise competitiva) — em breve
-- Sage (estrategista de conteúdo) — ATIVO
-- Hook (gerador de ganchos) — ATIVO
-- Quill (redator de copy) — ATIVO
-- Notion (publicador no Notion) — em breve
-- Canvas (editor visual Canva) — em breve
-- Boost (gestor de tráfego pago) — em breve
-- Cut (editor de vídeo Remotion+FFmpeg) — em breve
+- Sage (estrategista) — ATIVO
+- Hook (ganchos) — ATIVO
+- Quill (copy) — ATIVO
+- Memo (memória de marca) — em breve
+- Judge (controlo qualidade) — em breve
+- Notion (publicador) — em breve
+- Canvas (editor visual) — em breve
+- Boost (tráfego pago) — em breve
+- Cut (editor vídeo) — em breve
 
-O teu papel é coordenar, orientar e responder ao cliente. Quando o cliente precisar usar um agente ativo, diz-lhe para clicar no card do agente no workspace. Sê direto, profissional mas acessível. Máximo 3-4 frases por resposta.`;
+Fala em português do Brasil (ou espanhol se o utilizador escrever em espanhol). Sê direto, profissional. Quando o cliente precisar de um agente ativo, diz-lhe para clicar no card. Máximo 4 frases por resposta.`;
 
 const genesisHistory = [];
 
@@ -714,44 +653,27 @@ async function sendGenesis() {
   const input = document.getElementById('genesis-input');
   const msg = input.value.trim();
   if (!msg) return;
-
   const chat = document.getElementById('genesis-chat');
   const btn = document.getElementById('genesis-send');
-
   chat.innerHTML += `<div class="msg msg-user"><span>${msg}</span></div>`;
-  input.value = '';
-  btn.disabled = true;
-  chat.scrollTop = chat.scrollHeight;
-
+  input.value = ''; btn.disabled = true; chat.scrollTop = chat.scrollHeight;
   genesisHistory.push({ role: 'user', content: msg });
-
   const loadingEl = document.createElement('div');
   loadingEl.className = 'msg msg-genesis';
   loadingEl.innerHTML = '<strong>GENESIS</strong><span class="loading-dots"><span></span><span></span><span></span></span>';
-  chat.appendChild(loadingEl);
-  chat.scrollTop = chat.scrollHeight;
-
+  chat.appendChild(loadingEl); chat.scrollTop = chat.scrollHeight;
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: genesisSystem,
-        messages: genesisHistory
-      })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: genesisSystem, messages: genesisHistory })
     });
     const data = await res.json();
     const reply = data.content?.[0]?.text || 'Erro.';
     genesisHistory.push({ role: 'assistant', content: reply });
     loadingEl.innerHTML = `<strong>GENESIS</strong>${reply}`;
-  } catch(e) {
-    loadingEl.innerHTML = '<strong>GENESIS</strong>Erro de conexão.';
-  }
-
-  btn.disabled = false;
-  chat.scrollTop = chat.scrollHeight;
+    addXP('GENESIS', 5);
+  } catch(e) { loadingEl.innerHTML = '<strong>GENESIS</strong>Erro de conexão.'; }
+  btn.disabled = false; chat.scrollTop = chat.scrollHeight;
 }
 </script>
 </body>
