@@ -4,377 +4,490 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>GenesAI v7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --bg: #ffffff;
-    --bg2: #f7f7f5;
-    --bg3: #f0efea;
-    --text: #1a1a1a;
-    --text2: #6b6b6b;
-    --border: rgba(0,0,0,0.1);
-    --border2: rgba(0,0,0,0.2);
-    --purple-light: #EEEDFE;
-    --purple: #534AB7;
-    --purple-dark: #3C3489;
-    --green-light: #E1F5EE;
-    --green: #0F6E56;
-    --gray-light: #F1EFE8;
-    --gray: #5F5E5A;
-    --radius: 12px;
-    --radius-sm: 8px;
-  }
+:root {
+  --bg: #080808;
+  --bg2: #111111;
+  --bg3: #1a1a1a;
+  --bg4: #222222;
+  --text: #f0f0f0;
+  --text2: #888888;
+  --text3: #555555;
+  --accent: #7C3AED;
+  --accent2: #9F67FF;
+  --accent-glow: rgba(124,58,237,0.3);
+  --gold: #F59E0B;
+  --green: #10B981;
+  --blue: #3B82F6;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1a1a1a;
-      --bg2: #222222;
-      --bg3: #2a2a2a;
-      --text: #f0f0f0;
-      --text2: #999999;
-      --border: rgba(255,255,255,0.1);
-      --border2: rgba(255,255,255,0.2);
-      --purple-light: #2a2660;
-      --purple-dark: #c0bbf8;
-      --green-light: #0d3a2a;
-      --green: #5DCAA5;
-      --gray-light: #2a2a28;
-      --gray: #aaaaaa;
-    }
-  }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg3);
-    color: var(--text);
-    min-height: 100vh;
-  }
+/* NOISE TEXTURE */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
 
-  .app { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  position: relative;
+  z-index: 1;
+}
 
-  /* Top bar */
-  .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-text { font-size: 22px; font-weight: 600; color: var(--text); }
-  .logo-badge { font-size: 11px; background: var(--purple-light); color: var(--purple-dark); padding: 3px 10px; border-radius: 20px; font-weight: 500; }
-  .status { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #1D9E75; }
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
 
-  /* Sections */
-  .section { margin-bottom: 2rem; }
-  .section-title { font-size: 11px; font-weight: 600; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.logo-wrap { display: flex; align-items: center; gap: 14px; }
+.logo-icon {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 24px var(--accent-glow);
+}
+.logo-text { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.logo-text span { color: var(--accent2); }
+.logo-version {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  background: var(--bg3); border: 0.5px solid var(--border2);
+  color: var(--text2); padding: 3px 8px; border-radius: 20px;
+}
 
-  /* Agent grid */
-  .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.status-text { font-size: 12px; color: var(--text2); }
 
-  .agent-card {
-    background: var(--bg);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1rem;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s, transform 0.1s;
-    position: relative;
-    user-select: none;
-  }
-  .agent-card:hover { border-color: var(--border2); background: var(--bg2); transform: translateY(-1px); }
-  .agent-card.locked { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+/* GENESIS SECTION */
+.genesis-section {
+  background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(159,103,255,0.06));
+  border: 0.5px solid rgba(124,58,237,0.3);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.genesis-section::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 150px; height: 150px;
+  background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%);
+  pointer-events: none;
+}
+.genesis-header {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 1.25rem;
+}
+.genesis-avatar {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 0 20px rgba(124,58,237,0.4);
+  flex-shrink: 0;
+}
+.genesis-info { flex: 1; }
+.genesis-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+.genesis-role { font-size: 12px; color: var(--accent2); font-weight: 500; letter-spacing: 0.05em; }
 
-  .agent-icon { font-size: 22px; margin-bottom: 8px; color: var(--purple); }
-  .agent-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-  .agent-desc { font-size: 11px; color: var(--text2); line-height: 1.5; }
-  .agent-status { position: absolute; top: 10px; right: 10px; font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 500; }
-  .status-ready { background: var(--green-light); color: var(--green); }
-  .status-soon { background: var(--gray-light); color: var(--gray); }
+.chat-area {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  min-height: 120px;
+  max-height: 280px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text2);
+}
+.chat-area::-webkit-scrollbar { width: 4px; }
+.chat-area::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 4px; }
 
-  /* Panel overlay */
-  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 100; }
-  .overlay.visible { display: block; }
+.msg { margin-bottom: 12px; }
+.msg:last-child { margin-bottom: 0; }
+.msg-genesis { color: var(--text); }
+.msg-genesis strong { color: var(--accent2); font-size: 11px; font-weight: 600; display: block; margin-bottom: 2px; letter-spacing: 0.05em; }
+.msg-user { text-align: right; }
+.msg-user span { background: var(--bg3); border-radius: 10px 10px 2px 10px; padding: 6px 12px; display: inline-block; font-size: 13px; color: var(--text); }
 
-  .panel {
-    display: none;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: var(--bg);
-    border-top: 0.5px solid var(--border2);
-    border-radius: var(--radius) var(--radius) 0 0;
-    padding: 1.5rem;
-    z-index: 101;
-    max-height: 85vh;
-    overflow-y: auto;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  .panel.visible { display: block; }
+.chat-input-row { display: flex; gap: 10px; }
+.chat-input {
+  flex: 1; background: var(--bg2); border: 0.5px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif;
+  outline: none; transition: border-color 0.15s;
+}
+.chat-input:focus { border-color: var(--accent); }
+.chat-input::placeholder { color: var(--text3); }
+.send-btn {
+  background: var(--accent); border: none; border-radius: var(--radius-sm);
+  width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: white; font-size: 16px;
+  transition: background 0.15s, transform 0.1s;
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+.send-btn:hover { background: var(--accent2); transform: scale(1.05); }
+.send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
-  .panel-title { font-size: 16px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
-  .close-btn { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 50%; width: 30px; height: 30px; font-size: 18px; color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
+.loading-dots { display: inline-flex; gap: 4px; align-items: center; }
+.loading-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--accent2); animation: bounce 1.2s infinite; }
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-5px)} }
 
-  /* Forms */
-  .lang-row { display: flex; gap: 8px; margin-bottom: 14px; }
-  .lang-btn { padding: 5px 14px; border-radius: 20px; border: 0.5px solid var(--border2); font-size: 12px; cursor: pointer; background: transparent; color: var(--text2); transition: all 0.15s; }
-  .lang-btn.active { background: var(--purple-light); color: var(--purple-dark); border-color: transparent; font-weight: 500; }
+/* SECTION TITLES */
+.section-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text3);
+  margin-bottom: 12px; padding-left: 2px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 0.5px; background: var(--border);
+}
 
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .field { display: flex; flex-direction: column; gap: 5px; }
-  .field label { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.04em; }
-  .field input, .field select, .field textarea {
-    font-size: 13px; padding: 8px 10px;
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius-sm);
-    background: var(--bg2);
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.15s;
-    font-family: inherit;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--purple); }
-  .field textarea { resize: vertical; min-height: 65px; }
-  .full { grid-column: 1 / -1; }
+/* AGENTS GRID */
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 2rem;
+}
 
-  .run-btn {
-    width: 100%; padding: 10px; font-size: 13px; font-weight: 600;
-    border-radius: var(--radius-sm); border: 0.5px solid var(--border2);
-    background: var(--bg2); color: var(--text); cursor: pointer; margin-top: 4px;
-    transition: background 0.15s;
-  }
-  .run-btn:hover { background: var(--purple-light); color: var(--purple-dark); border-color: var(--purple); }
-  .run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.agent-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.agent-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.02));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.agent-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.agent-card:hover::before { opacity: 1; }
+.agent-card.locked { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+.agent-card.active { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
 
-  .output-box {
-    background: var(--bg2); border: 0.5px solid var(--border);
-    border-radius: var(--radius-sm); padding: 1rem; margin-top: 12px;
-    font-size: 13px; line-height: 1.8; color: var(--text);
-    white-space: pre-wrap; display: none;
-  }
-  .output-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; display: none; }
-  .char-count { font-size: 11px; color: var(--text2); }
-  .copy-btn {
-    font-size: 11px; color: var(--text2); background: none;
-    border: 0.5px solid var(--border); border-radius: var(--radius-sm);
-    padding: 4px 10px; cursor: pointer; display: flex; align-items: center; gap: 4px;
-  }
-  .copy-btn:hover { background: var(--bg3); }
+.agent-emoji { font-size: 22px; margin-bottom: 10px; display: block; }
+.agent-codename {
+  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+  color: var(--text); margin-bottom: 3px;
+}
+.agent-role { font-size: 11px; color: var(--text3); line-height: 1.4; }
+.agent-badge {
+  position: absolute; top: 10px; right: 10px;
+  font-size: 9px; font-weight: 600; letter-spacing: 0.06em;
+  padding: 2px 7px; border-radius: 20px;
+}
+.badge-active { background: rgba(16,185,129,0.15); color: var(--green); }
+.badge-soon { background: rgba(255,255,255,0.05); color: var(--text3); }
 
-  .loading-dots { display: inline-flex; gap: 4px; align-items: center; }
-  .loading-dots span { width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: bounce 1.2s infinite; }
-  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-5px)} }
+/* AGENT PANEL */
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  z-index: 100;
+}
+.overlay.visible { display: block; }
 
-  @media (max-width: 480px) {
-    .form-row { grid-template-columns: 1fr; }
-    .full { grid-column: 1; }
-    .agents-grid { grid-template-columns: 1fr 1fr; }
-  }
+.panel {
+  display: none; position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--bg2);
+  border-top: 0.5px solid var(--border2);
+  border-radius: 20px 20px 0 0;
+  padding: 1.75rem;
+  z-index: 101;
+  max-height: 80vh;
+  overflow-y: auto;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.panel.visible { display: block; }
+
+.panel-header {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 1.25rem;
+}
+.panel-title {
+  font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+}
+.close-btn {
+  width: 30px; height: 30px; background: var(--bg3);
+  border: 0.5px solid var(--border); border-radius: 50%;
+  font-size: 16px; color: var(--text2); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.close-btn:hover { background: var(--bg4); }
+
+.lang-row { display: flex; gap: 8px; margin-bottom: 14px; }
+.lang-btn {
+  padding: 5px 14px; border-radius: 20px;
+  border: 0.5px solid var(--border2); font-size: 12px;
+  cursor: pointer; background: transparent; color: var(--text2);
+  font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+}
+.lang-btn.active { background: var(--accent); color: white; border-color: transparent; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 10px; font-weight: 600; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.field input, .field select, .field textarea {
+  font-size: 13px; padding: 9px 12px;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--bg3); color: var(--text);
+  outline: none; font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.15s;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+.field textarea { resize: vertical; min-height: 65px; }
+.field select option { background: var(--bg3); }
+.full { grid-column: 1 / -1; }
+
+.run-btn {
+  width: 100%; padding: 11px; font-size: 13px; font-weight: 600;
+  border-radius: var(--radius-sm); border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white; cursor: pointer; margin-top: 4px;
+  font-family: 'DM Sans', sans-serif;
+  transition: opacity 0.15s, transform 0.1s;
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+.run-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.run-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.output-box {
+  background: var(--bg3); border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1rem; margin-top: 14px;
+  font-size: 13px; line-height: 1.8; color: var(--text);
+  white-space: pre-wrap; display: none;
+}
+.output-footer { display: none; justify-content: space-between; align-items: center; margin-top: 8px; }
+.char-count { font-size: 11px; color: var(--text3); }
+.copy-btn {
+  font-size: 11px; color: var(--text2); background: var(--bg3);
+  border: 0.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 4px 10px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: 4px;
+}
+.copy-btn:hover { background: var(--bg4); }
+
+/* SECTION SPACING */
+.section { margin-bottom: 2rem; }
+
+@media (max-width: 500px) {
+  .form-row { grid-template-columns: 1fr; }
+  .full { grid-column: 1; }
+  .agents-grid { grid-template-columns: 1fr 1fr; }
+}
 </style>
 </head>
 <body>
 <div class="overlay" id="overlay" onclick="closePanel()"></div>
 
 <div class="app">
-  <div class="top-bar">
-    <div class="logo">
-      <span class="logo-text">GenesAI</span>
-      <span class="logo-badge">v7</span>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-wrap">
+      <div class="logo-icon">🧬</div>
+      <div>
+        <div class="logo-text">Genes<span>AI</span></div>
+      </div>
+      <span class="logo-version">v7</span>
     </div>
-    <div class="status">
-      <span class="status-dot"></span>
-      3 agentes ativos · 8 em breve
+    <div class="header-right">
+      <div class="status-dot"></div>
+      <span class="status-text">3 ativos · 9 em breve</span>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-title">✍️ Produção de conteúdo</div>
-    <div class="agents-grid">
-      <div class="agent-card" onclick="openPanel('copy')">
-        <span class="agent-status status-ready">Ativo</span>
-        <div class="agent-icon"><i class="ti ti-pencil"></i></div>
-        <div class="agent-name">Redator Copy</div>
-        <div class="agent-desc">Cria textos prontos para publicar em qualquer rede</div>
+  <!-- GENESIS DIRECTOR -->
+  <div class="genesis-section">
+    <div class="genesis-header">
+      <div class="genesis-avatar">👑</div>
+      <div class="genesis-info">
+        <div class="genesis-name">GENESIS</div>
+        <div class="genesis-role">DIRETOR DA AGÊNCIA · GenesAI v7</div>
       </div>
-      <div class="agent-card" onclick="openPanel('hooks')">
-        <span class="agent-status status-ready">Ativo</span>
-        <div class="agent-icon"><i class="ti ti-hook"></i></div>
-        <div class="agent-name">Caçador de Hooks</div>
-        <div class="agent-desc">Gera ganchos virais adaptados ao seu nicho</div>
+    </div>
+    <div class="chat-area" id="genesis-chat">
+      <div class="msg msg-genesis">
+        <strong>GENESIS</strong>
+        Olá. Sou o diretor da GenesAI v7. Fala comigo diretamente — diz-me o que precisas e eu coordeno toda a equipa. Podes pedir-me para criar conteúdo, analisar tendências, editar um vídeo ou planear a tua semana. A equipa trabalha, tu só tens que falar comigo.
       </div>
-      <div class="agent-card" onclick="openPanel('strategy')">
-        <span class="agent-status status-ready">Ativo</span>
-        <div class="agent-icon"><i class="ti ti-calendar-week"></i></div>
-        <div class="agent-name">Estrategista</div>
-        <div class="agent-desc">Cria 15 pautas semanais de conteúdo</div>
-      </div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" class="chat-input" id="genesis-input" placeholder="Fala com o Genesis..." onkeydown="if(event.key==='Enter')sendGenesis()" />
+      <button class="send-btn" id="genesis-send" onclick="sendGenesis()">
+        <i class="ti ti-send"></i>
+      </button>
     </div>
   </div>
 
+  <!-- INVESTIGAÇÃO -->
   <div class="section">
-    <div class="section-title">🔍 Investigação</div>
+    <div class="section-label">🔍 Investigação</div>
     <div class="agents-grid">
       <div class="agent-card locked">
-        <span class="agent-status status-soon">Em breve</span>
-        <div class="agent-icon"><i class="ti ti-search"></i></div>
-        <div class="agent-name">Investigador</div>
-        <div class="agent-desc">Pesquisa tendências e temas relevantes</div>
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">🛰</span>
+        <div class="agent-codename">Scout</div>
+        <div class="agent-role">Investigador de tendências virais</div>
       </div>
       <div class="agent-card locked">
-        <span class="agent-status status-soon">Em breve</span>
-        <div class="agent-icon"><i class="ti ti-brand-instagram"></i></div>
-        <div class="agent-name">Scout de Perfis</div>
-        <div class="agent-desc">Coleta ganchos de perfis do mesmo nicho</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">📊 Análise</div>
-    <div class="agents-grid">
-      <div class="agent-card locked">
-        <span class="agent-status status-soon">Em breve</span>
-        <div class="agent-icon"><i class="ti ti-chart-bar"></i></div>
-        <div class="agent-name">Analista de Perfil</div>
-        <div class="agent-desc">Analisa seu desempenho e métricas</div>
-      </div>
-      <div class="agent-card locked">
-        <span class="agent-status status-soon">Em breve</span>
-        <div class="agent-icon"><i class="ti ti-chart-dots"></i></div>
-        <div class="agent-name">Analista Competitivo</div>
-        <div class="agent-desc">Compara seu perfil com concorrentes</div>
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">📡</span>
+        <div class="agent-codename">Radar</div>
+        <div class="agent-role">Caçador de hooks de outros perfis</div>
       </div>
     </div>
   </div>
 
+  <!-- ANÁLISE -->
   <div class="section">
-    <div class="section-title">📋 Publicação</div>
+    <div class="section-label">📊 Análise</div>
     <div class="agents-grid">
       <div class="agent-card locked">
-        <span class="agent-status status-soon">Em breve</span>
-        <div class="agent-icon"><i class="ti ti-brand-notion"></i></div>
-        <div class="agent-name">Publicador Notion</div>
-        <div class="agent-desc">Leva o calendário direto ao Notion</div>
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">🪞</span>
+        <div class="agent-codename">Mirror</div>
+        <div class="agent-role">Analista do teu perfil</div>
       </div>
       <div class="agent-card locked">
-        <span class="agent-status status-soon">Em breve</span>
-        <div class="agent-icon"><i class="ti ti-palette"></i></div>
-        <div class="agent-name">Editor Canva</div>
-        <div class="agent-desc">Cria peças visuais automaticamente</div>
-      </div>
-      <div class="agent-card locked">
-        <span class="agent-status status-soon">Em breve</span>
-        <div class="agent-icon"><i class="ti ti-speakerphone"></i></div>
-        <div class="agent-name">Gestor de Tráfego</div>
-        <div class="agent-desc">Orienta criativos para tráfego pago</div>
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">🎯</span>
+        <div class="agent-codename">Rival</div>
+        <div class="agent-role">Analista competitivo do nicho</div>
       </div>
     </div>
   </div>
 
+  <!-- PRODUÇÃO -->
   <div class="section">
-    <div class="section-title">🎬 Vídeo</div>
+    <div class="section-label">✍️ Produção de conteúdo</div>
     <div class="agents-grid">
-      <div class="agent-card locked">
-        <span class="agent-status status-soon">Em breve</span>
-        <div class="agent-icon"><i class="ti ti-video"></i></div>
-        <div class="agent-name">Editor de Vídeo</div>
-        <div class="agent-desc">Cria vídeos animados com Remotion</div>
+      <div class="agent-card" onclick="openPanel('sage')">
+        <span class="agent-badge badge-active">Ativo</span>
+        <span class="agent-emoji">🧠</span>
+        <div class="agent-codename">Sage</div>
+        <div class="agent-role">Estrategista — 15 pautas semanais</div>
+      </div>
+      <div class="agent-card" onclick="openPanel('hook')">
+        <span class="agent-badge badge-active">Ativo</span>
+        <span class="agent-emoji">🪝</span>
+        <div class="agent-codename">Hook</div>
+        <div class="agent-role">Gerador de ganchos virais</div>
+      </div>
+      <div class="agent-card" onclick="openPanel('quill')">
+        <span class="agent-badge badge-active">Ativo</span>
+        <span class="agent-emoji">✒️</span>
+        <div class="agent-codename">Quill</div>
+        <div class="agent-role">Redator de copy profissional</div>
       </div>
     </div>
   </div>
+
+  <!-- PUBLICAÇÃO -->
+  <div class="section">
+    <div class="section-label">📋 Publicação</div>
+    <div class="agents-grid">
+      <div class="agent-card locked">
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">📓</span>
+        <div class="agent-codename">Notion</div>
+        <div class="agent-role">Publicador no Notion</div>
+      </div>
+      <div class="agent-card locked">
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">🎨</span>
+        <div class="agent-codename">Canvas</div>
+        <div class="agent-role">Editor visual no Canva</div>
+      </div>
+      <div class="agent-card locked">
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">🚀</span>
+        <div class="agent-codename">Boost</div>
+        <div class="agent-role">Gestor de tráfego pago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VÍDEO -->
+  <div class="section">
+    <div class="section-label">🎬 Vídeo</div>
+    <div class="agents-grid">
+      <div class="agent-card locked">
+        <span class="agent-badge badge-soon">Em breve</span>
+        <span class="agent-emoji">✂️</span>
+        <div class="agent-codename">Cut</div>
+        <div class="agent-role">Editor de vídeo — Remotion + FFmpeg</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<!-- Panel Copy -->
-<div class="panel" id="panel-copy">
+<!-- PANEL SAGE -->
+<div class="panel" id="panel-sage">
   <div class="panel-header">
-    <span class="panel-title"><i class="ti ti-pencil"></i> Redator Copy</span>
+    <span class="panel-title">🧠 Sage — Estrategista</span>
     <button class="close-btn" onclick="closePanel()">×</button>
   </div>
   <div class="lang-row">
-    <button class="lang-btn active" onclick="setLang('pt','copy')" id="copy-btn-pt">🇧🇷 Português</button>
-    <button class="lang-btn" onclick="setLang('es','copy')" id="copy-btn-es">🇪🇸 Español</button>
-  </div>
-  <div class="form-row">
-    <div class="field"><label>Rede social</label>
-      <select id="c-platform">
-        <option value="instagram">Instagram</option>
-        <option value="tiktok">TikTok</option>
-        <option value="linkedin">LinkedIn</option>
-        <option value="twitter">Twitter / X</option>
-        <option value="youtube">YouTube</option>
-      </select>
-    </div>
-    <div class="field"><label>Tom</label>
-      <select id="c-tone">
-        <option value="inspirador">Inspirador</option>
-        <option value="educativo">Educativo</option>
-        <option value="provocativo">Provocativo</option>
-        <option value="pessoal">Pessoal / Storytelling</option>
-        <option value="direto">Direto ao ponto</option>
-        <option value="humorístico">Humorístico</option>
-      </select>
-    </div>
-    <div class="field full"><label>Tema</label><input type="text" id="c-topic" placeholder="Ex: Como crescer no Instagram sem pagar anúncios" /></div>
-    <div class="field full"><label>Hook — opcional</label><input type="text" id="c-hook" placeholder="Ex: Eu cresci 10k seguidores em 30 dias fazendo isso..." /></div>
-    <div class="field full"><label>Contexto — opcional</label><textarea id="c-context" placeholder="Nicho, público-alvo, palavras-chave..."></textarea></div>
-  </div>
-  <button class="run-btn" id="c-run" onclick="runCopy()"><i class="ti ti-sparkles"></i> Gerar copy</button>
-  <div class="output-box" id="c-output"></div>
-  <div class="output-footer" id="c-footer">
-    <span class="char-count" id="c-chars"></span>
-    <button class="copy-btn" onclick="copyOut('c-output')"><i class="ti ti-copy"></i> Copiar</button>
-  </div>
-</div>
-
-<!-- Panel Hooks -->
-<div class="panel" id="panel-hooks">
-  <div class="panel-header">
-    <span class="panel-title"><i class="ti ti-hook"></i> Caçador de Hooks</span>
-    <button class="close-btn" onclick="closePanel()">×</button>
-  </div>
-  <div class="lang-row">
-    <button class="lang-btn active" onclick="setLang('pt','hooks')" id="hooks-btn-pt">🇧🇷 Português</button>
-    <button class="lang-btn" onclick="setLang('es','hooks')" id="hooks-btn-es">🇪🇸 Español</button>
-  </div>
-  <div class="form-row">
-    <div class="field full"><label>Nicho / tema</label><input type="text" id="h-niche" placeholder="Ex: marketing digital, fitness, finanças pessoais..." /></div>
-    <div class="field"><label>Rede social</label>
-      <select id="h-platform">
-        <option value="instagram">Instagram</option>
-        <option value="tiktok">TikTok</option>
-        <option value="linkedin">LinkedIn</option>
-        <option value="youtube">YouTube</option>
-      </select>
-    </div>
-    <div class="field"><label>Tipo de hook</label>
-      <select id="h-type">
-        <option value="curiosidade">Curiosidade</option>
-        <option value="controvérsia">Controvérsia</option>
-        <option value="resultado">Resultado / transformação</option>
-        <option value="pergunta">Pergunta</option>
-        <option value="erro comum">Erro comum</option>
-        <option value="segredo revelado">Segredo revelado</option>
-      </select>
-    </div>
-    <div class="field full"><label>Público-alvo — opcional</label><input type="text" id="h-audience" placeholder="Ex: empreendedores iniciantes, mães de 30-40 anos..." /></div>
-  </div>
-  <button class="run-btn" id="h-run" onclick="runHooks()"><i class="ti ti-sparkles"></i> Gerar hooks</button>
-  <div class="output-box" id="h-output"></div>
-  <div class="output-footer" id="h-footer">
-    <span class="char-count" id="h-chars"></span>
-    <button class="copy-btn" onclick="copyOut('h-output')"><i class="ti ti-copy"></i> Copiar</button>
-  </div>
-</div>
-
-<!-- Panel Strategy -->
-<div class="panel" id="panel-strategy">
-  <div class="panel-header">
-    <span class="panel-title"><i class="ti ti-calendar-week"></i> Estrategista de Conteúdo</span>
-    <button class="close-btn" onclick="closePanel()">×</button>
-  </div>
-  <div class="lang-row">
-    <button class="lang-btn active" onclick="setLang('pt','strategy')" id="strategy-btn-pt">🇧🇷 Português</button>
-    <button class="lang-btn" onclick="setLang('es','strategy')" id="strategy-btn-es">🇪🇸 Español</button>
+    <button class="lang-btn active" onclick="setLang('pt','sage')" id="sage-pt">🇧🇷 Português</button>
+    <button class="lang-btn" onclick="setLang('es','sage')" id="sage-es">🇪🇸 Español</button>
   </div>
   <div class="form-row">
     <div class="field full"><label>Nicho / tema principal</label><input type="text" id="s-niche" placeholder="Ex: marketing digital para pequenos negócios" /></div>
@@ -399,7 +512,7 @@
     </div>
     <div class="field full"><label>Contexto extra — opcional</label><textarea id="s-context" placeholder="Produtos, serviços, eventos da semana..."></textarea></div>
   </div>
-  <button class="run-btn" id="s-run" onclick="runStrategy()"><i class="ti ti-sparkles"></i> Gerar 15 pautas</button>
+  <button class="run-btn" id="s-run" onclick="runSage()"><i class="ti ti-sparkles"></i> Gerar 15 pautas</button>
   <div class="output-box" id="s-output"></div>
   <div class="output-footer" id="s-footer">
     <span class="char-count" id="s-chars"></span>
@@ -407,8 +520,90 @@
   </div>
 </div>
 
+<!-- PANEL HOOK -->
+<div class="panel" id="panel-hook">
+  <div class="panel-header">
+    <span class="panel-title">🪝 Hook — Ganchos Virais</span>
+    <button class="close-btn" onclick="closePanel()">×</button>
+  </div>
+  <div class="lang-row">
+    <button class="lang-btn active" onclick="setLang('pt','hook')" id="hook-pt">🇧🇷 Português</button>
+    <button class="lang-btn" onclick="setLang('es','hook')" id="hook-es">🇪🇸 Español</button>
+  </div>
+  <div class="form-row">
+    <div class="field full"><label>Nicho / tema</label><input type="text" id="h-niche" placeholder="Ex: trading, fitness, finanças pessoais..." /></div>
+    <div class="field"><label>Rede social</label>
+      <select id="h-platform">
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+        <option value="LinkedIn">LinkedIn</option>
+        <option value="YouTube">YouTube</option>
+      </select>
+    </div>
+    <div class="field"><label>Tipo de hook</label>
+      <select id="h-type">
+        <option value="curiosidade">Curiosidade</option>
+        <option value="controvérsia">Controvérsia</option>
+        <option value="resultado">Resultado / transformação</option>
+        <option value="pergunta">Pergunta</option>
+        <option value="erro comum">Erro comum</option>
+        <option value="segredo revelado">Segredo revelado</option>
+      </select>
+    </div>
+    <div class="field full"><label>Público-alvo — opcional</label><input type="text" id="h-audience" placeholder="Ex: iniciantes em trading, mães empreendedoras..." /></div>
+  </div>
+  <button class="run-btn" id="h-run" onclick="runHook()"><i class="ti ti-sparkles"></i> Gerar hooks</button>
+  <div class="output-box" id="h-output"></div>
+  <div class="output-footer" id="h-footer">
+    <span class="char-count" id="h-chars"></span>
+    <button class="copy-btn" onclick="copyOut('h-output')"><i class="ti ti-copy"></i> Copiar</button>
+  </div>
+</div>
+
+<!-- PANEL QUILL -->
+<div class="panel" id="panel-quill">
+  <div class="panel-header">
+    <span class="panel-title">✒️ Quill — Redator Copy</span>
+    <button class="close-btn" onclick="closePanel()">×</button>
+  </div>
+  <div class="lang-row">
+    <button class="lang-btn active" onclick="setLang('pt','quill')" id="quill-pt">🇧🇷 Português</button>
+    <button class="lang-btn" onclick="setLang('es','quill')" id="quill-es">🇪🇸 Español</button>
+  </div>
+  <div class="form-row">
+    <div class="field"><label>Rede social</label>
+      <select id="q-platform">
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+        <option value="LinkedIn">LinkedIn</option>
+        <option value="Twitter / X">Twitter / X</option>
+        <option value="YouTube">YouTube</option>
+      </select>
+    </div>
+    <div class="field"><label>Tom</label>
+      <select id="q-tone">
+        <option value="inspirador">Inspirador</option>
+        <option value="educativo">Educativo</option>
+        <option value="provocativo">Provocativo</option>
+        <option value="pessoal">Pessoal / Storytelling</option>
+        <option value="direto">Direto ao ponto</option>
+        <option value="humorístico">Humorístico</option>
+      </select>
+    </div>
+    <div class="field full"><label>Tema</label><input type="text" id="q-topic" placeholder="Ex: Como fiz €800 em 30 dias com trading" /></div>
+    <div class="field full"><label>Hook — opcional</label><input type="text" id="q-hook" placeholder="Ex: Ninguém me contou isso quando comecei..." /></div>
+    <div class="field full"><label>Contexto — opcional</label><textarea id="q-context" placeholder="Nicho, público-alvo, palavras-chave..."></textarea></div>
+  </div>
+  <button class="run-btn" id="q-run" onclick="runQuill()"><i class="ti ti-sparkles"></i> Gerar copy</button>
+  <div class="output-box" id="q-output"></div>
+  <div class="output-footer" id="q-footer">
+    <span class="char-count" id="q-chars"></span>
+    <button class="copy-btn" onclick="copyOut('q-output')"><i class="ti ti-copy"></i> Copiar</button>
+  </div>
+</div>
+
 <script>
-const langs = { copy: 'pt', hooks: 'pt', strategy: 'pt' };
+const langs = { sage: 'pt', hook: 'pt', quill: 'pt' };
 
 function openPanel(id) {
   closePanel();
@@ -425,16 +620,16 @@ function closePanel() {
 
 function setLang(lang, agent) {
   langs[agent] = lang;
-  document.getElementById(agent + '-btn-pt').classList.toggle('active', lang === 'pt');
-  document.getElementById(agent + '-btn-es').classList.toggle('active', lang === 'es');
+  document.getElementById(agent + '-pt').classList.toggle('active', lang === 'pt');
+  document.getElementById(agent + '-es').classList.toggle('active', lang === 'es');
 }
 
-async function callClaude(system, user, outputId, footerId, charsId, btnId, btnLabel) {
+async function callClaude(system, user, outputId, footerId, charsId, btnId, label) {
   const btn = document.getElementById(btnId);
   const out = document.getElementById(outputId);
   const footer = document.getElementById(footerId);
   btn.disabled = true;
-  btn.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span> Gerando...';
+  btn.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
   out.style.display = 'block';
   out.textContent = '';
   footer.style.display = 'none';
@@ -443,7 +638,12 @@ async function callClaude(system, user, outputId, footerId, charsId, btnId, btnL
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system, messages: [{ role: 'user', content: user }] })
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system,
+        messages: [{ role: 'user', content: user }]
+      })
     });
     const data = await res.json();
     const text = data.content?.[0]?.text || 'Erro ao gerar.';
@@ -451,57 +651,107 @@ async function callClaude(system, user, outputId, footerId, charsId, btnId, btnL
     document.getElementById(charsId).textContent = text.length + ' caracteres';
     footer.style.display = 'flex';
   } catch(e) {
-    out.textContent = 'Erro de conexão. Tente novamente.';
+    out.textContent = 'Erro de conexão.';
     out.style.display = 'block';
   }
 
   btn.disabled = false;
-  btn.innerHTML = '<i class="ti ti-sparkles"></i> ' + btnLabel;
+  btn.innerHTML = '<i class="ti ti-sparkles"></i> ' + label;
 }
 
-function runCopy() {
-  const lang = langs.copy === 'pt' ? 'português brasileiro' : 'español latino';
-  const platform = document.getElementById('c-platform').value;
-  const tone = document.getElementById('c-tone').value;
-  const topic = document.getElementById('c-topic').value.trim();
-  if (!topic) { alert('Preencha o tema.'); return; }
-  const hook = document.getElementById('c-hook').value.trim();
-  const context = document.getElementById('c-context').value.trim();
-  const system = `Você é um redator de copy especialista em redes sociais. Escreva em ${lang}. Adapte o formato para ${platform}. Tom: ${tone}. Sem asteriscos nem markdown. Para Instagram/TikTok use emojis e hashtags. Para Twitter máximo 280 caracteres. Texto pronto para publicar.`;
-  const user = `Tema: ${topic}${hook ? '\nHook: ' + hook : ''}${context ? '\nContexto: ' + context : ''}`;
-  callClaude(system, user, 'c-output', 'c-footer', 'c-chars', 'c-run', 'Gerar copy');
-}
-
-function runHooks() {
-  const lang = langs.hooks === 'pt' ? 'português brasileiro' : 'español latino';
-  const niche = document.getElementById('h-niche').value.trim();
-  if (!niche) { alert('Preencha o nicho.'); return; }
-  const platform = document.getElementById('h-platform').value;
-  const type = document.getElementById('h-type').value;
-  const audience = document.getElementById('h-audience').value.trim();
-  const system = `Você é um especialista em hooks virais para redes sociais. Escreva em ${lang}. Crie 10 hooks do tipo "${type}" para ${platform}. Cada hook em uma linha numerada, sem explicações extras. Diretos, impactantes e prontos para usar.`;
-  const user = `Nicho: ${niche}${audience ? '\nPúblico: ' + audience : ''}`;
-  callClaude(system, user, 'h-output', 'h-footer', 'h-chars', 'h-run', 'Gerar hooks');
-}
-
-function runStrategy() {
-  const lang = langs.strategy === 'pt' ? 'português brasileiro' : 'español latino';
+function runSage() {
+  const lang = langs.sage === 'pt' ? 'português brasileiro' : 'español latino';
   const niche = document.getElementById('s-niche').value.trim();
-  if (!niche) { alert('Preencha o nicho.'); return; }
-  const audience = document.getElementById('s-audience').value.trim();
-  const platform = document.getElementById('s-platform').value;
-  const goal = document.getElementById('s-goal').value;
-  const context = document.getElementById('s-context').value.trim();
-  const system = `Você é uma estrategista de conteúdo sênior. Escreva em ${lang}. Crie exatamente 15 pautas numeradas de 1 a 15. Para cada pauta: tema, formato sugerido e melhor dia para postar. Sem introduções, direto às pautas.`;
-  const user = `Nicho: ${niche}\nPúblico: ${audience}\nRedes: ${platform}\nObjetivo: ${goal}${context ? '\nContexto: ' + context : ''}`;
+  if (!niche) { alert('Preenche o nicho.'); return; }
+  const system = `És uma estrategista de conteúdo sénior. Escreve em ${lang}. Cria exatamente 15 pautas numeradas de 1 a 15. Para cada pauta inclui: tema, formato sugerido e melhor dia para publicar. Sem introduções, direto às pautas.`;
+  const user = `Nicho: ${niche}\nPúblico: ${document.getElementById('s-audience').value}\nRedes: ${document.getElementById('s-platform').value}\nObjetivo: ${document.getElementById('s-goal').value}\n${document.getElementById('s-context').value ? 'Contexto: ' + document.getElementById('s-context').value : ''}`;
   callClaude(system, user, 's-output', 's-footer', 's-chars', 's-run', 'Gerar 15 pautas');
 }
 
+function runHook() {
+  const lang = langs.hook === 'pt' ? 'português brasileiro' : 'español latino';
+  const niche = document.getElementById('h-niche').value.trim();
+  if (!niche) { alert('Preenche o nicho.'); return; }
+  const system = `És um especialista em hooks virais. Escreve em ${lang}. Cria 10 hooks do tipo "${document.getElementById('h-type').value}" para ${document.getElementById('h-platform').value}. Um por linha, numerados, sem explicações. Diretos e impactantes.`;
+  const user = `Nicho: ${niche}${document.getElementById('h-audience').value ? '\nPúblico: ' + document.getElementById('h-audience').value : ''}`;
+  callClaude(system, user, 'h-output', 'h-footer', 'h-chars', 'h-run', 'Gerar hooks');
+}
+
+function runQuill() {
+  const lang = langs.quill === 'pt' ? 'português brasileiro' : 'español latino';
+  const topic = document.getElementById('q-topic').value.trim();
+  if (!topic) { alert('Preenche o tema.'); return; }
+  const platform = document.getElementById('q-platform').value;
+  const tone = document.getElementById('q-tone').value;
+  const system = `És um redator de copy especialista em redes sociais. Escreve em ${lang}. Adapta o formato para ${platform}. Tom: ${tone}. Sem asteriscos nem markdown. Para Instagram/TikTok usa emojis e hashtags. Para Twitter máximo 280 caracteres. Texto pronto para publicar.`;
+  const user = `Tema: ${topic}${document.getElementById('q-hook').value ? '\nHook: ' + document.getElementById('q-hook').value : ''}${document.getElementById('q-context').value ? '\nContexto: ' + document.getElementById('q-context').value : ''}`;
+  callClaude(system, user, 'q-output', 'q-footer', 'q-chars', 'q-run', 'Gerar copy');
+}
+
 function copyOut(id) {
-  navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
-    const btns = document.querySelectorAll('.copy-btn');
-    btns.forEach(b => { if(b.onclick && b.onclick.toString().includes(id)) { b.innerHTML = '<i class="ti ti-check"></i> Copiado!'; setTimeout(() => b.innerHTML = '<i class="ti ti-copy"></i> Copiar', 2000); }});
-  });
+  navigator.clipboard.writeText(document.getElementById(id).textContent);
+}
+
+// GENESIS CHAT
+const genesisSystem = `És o GENESIS, o diretor da agência GenesAI v7. Falas sempre em português do Brasil (ou espanhol se o utilizador escrever em espanhol). Tens uma equipa de 11 agentes especializados:
+- Scout (tendências virais) — em breve
+- Radar (hooks de outros perfis) — em breve  
+- Mirror (análise do perfil próprio) — em breve
+- Rival (análise competitiva) — em breve
+- Sage (estrategista de conteúdo) — ATIVO
+- Hook (gerador de ganchos) — ATIVO
+- Quill (redator de copy) — ATIVO
+- Notion (publicador no Notion) — em breve
+- Canvas (editor visual Canva) — em breve
+- Boost (gestor de tráfego pago) — em breve
+- Cut (editor de vídeo Remotion+FFmpeg) — em breve
+
+O teu papel é coordenar, orientar e responder ao cliente. Quando o cliente precisar usar um agente ativo, diz-lhe para clicar no card do agente no workspace. Sê direto, profissional mas acessível. Máximo 3-4 frases por resposta.`;
+
+const genesisHistory = [];
+
+async function sendGenesis() {
+  const input = document.getElementById('genesis-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const chat = document.getElementById('genesis-chat');
+  const btn = document.getElementById('genesis-send');
+
+  chat.innerHTML += `<div class="msg msg-user"><span>${msg}</span></div>`;
+  input.value = '';
+  btn.disabled = true;
+  chat.scrollTop = chat.scrollHeight;
+
+  genesisHistory.push({ role: 'user', content: msg });
+
+  const loadingEl = document.createElement('div');
+  loadingEl.className = 'msg msg-genesis';
+  loadingEl.innerHTML = '<strong>GENESIS</strong><span class="loading-dots"><span></span><span></span><span></span></span>';
+  chat.appendChild(loadingEl);
+  chat.scrollTop = chat.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: genesisSystem,
+        messages: genesisHistory
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'Erro.';
+    genesisHistory.push({ role: 'assistant', content: reply });
+    loadingEl.innerHTML = `<strong>GENESIS</strong>${reply}`;
+  } catch(e) {
+    loadingEl.innerHTML = '<strong>GENESIS</strong>Erro de conexão.';
+  }
+
+  btn.disabled = false;
+  chat.scrollTop = chat.scrollHeight;
 }
 </script>
 </body>
